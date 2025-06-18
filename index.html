@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>For My Goofball</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: #000;
+      color: #fff;
+      font-family: 'Dancing Script', cursive;
+      padding: 2rem;
+      font-size: 1.4rem;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    body::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="%23666"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 6.014 4.014 4 6.5 4c1.74 0 3.41 1.01 4.22 2.44C11.09 5.01 12.76 4 14.5 4 16.986 4 19 6.014 19 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>');
+      opacity: 0.05;
+      background-repeat: repeat;
+      background-size: 20px 20px;
+      z-index: -1;
+    }
+
+    .centered {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      flex-direction: column;
+      text-align: center;
+    }
+
+    .letter-container {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      max-width: 800px;
+      margin: auto;
+    }
+
+    .letter {
+      background: #111;
+      padding: 2rem;
+      border-radius: 16px;
+      box-shadow: 0 0 20px rgba(255,255,255,0.1);
+      width: 100%;
+    }
+
+    h1 {
+      margin-bottom: 1.5rem;
+      color: #fff;
+      font-size: 2rem;
+    }
+
+    .typeline {
+      display: block;
+      overflow: hidden;
+      margin-bottom: 1.2rem;
+      min-height: 2rem;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+
+    #revealBtn {
+      margin-top: 2rem;
+      background: #fff;
+      color: #000;
+      border: none;
+      padding: 1rem 2rem;
+      font-size: 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      font-family: sans-serif;
+      transition: background 0.3s;
+    }
+
+    #revealBtn:hover {
+      background: #ccc;
+    }
+
+    #revealText {
+      display: none;
+      margin-top: 2rem;
+    }
+
+    .pic-reveal {
+      margin-top: 2rem;
+      max-width: 100%;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(255,255,255,0.2);
+    }
+
+    video#openEnvelope {
+      background-color: #000;
+      border-radius: 12px;
+    }
+
+    @media (max-width: 600px) {
+      body {
+        padding: 1rem;
+        font-size: 1.2rem;
+      }
+
+      .letter {
+        padding: 1.5rem;
+      }
+
+      #revealBtn {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <audio autoplay loop>
+    <source src="assets/bg-music.mp3" type="audio/mpeg">
+  </audio>
+
+  <div class="centered" id="envelopeScreen">
+    <p>Tap to open your letter 💌</p>
+    <video id="openEnvelope" width="200" autoplay loop muted playsinline>
+      <source src="assets/envelope.mp4" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+  </div>
+
+  <div class="letter-container" id="letterContainer">
+    <div class="letter">
+      <h1>To my goofball,</h1>
+
+      <div id="letterText">
+        <span class="typeline">It’s hard to put into words what you mean to me.</span>
+        <span class="typeline">Sometimes I sit there, just thinking of you — and all the words I want to say vanish.</span>
+        <span class="typeline">Because how do you describe the kind of comfort, chaos, peace, and laughter you bring… all at once?</span>
+        <span class="typeline">You make me speechless — in the best way.</span>
+        <span class="typeline">I know this page is simple. But it’s my little way of saying:</span>
+        <span class="typeline">you’re special. You're not just someone in my life — you're a feeling.</span>
+        <span class="typeline">I still think about that 7 hour call sometimes.</span>
+        <span class="typeline">Time didn't pass. It just... felt like we were floating.</span>
+        <span class="typeline">And maybe, that's what being around you is like.</span>
+      </div>
+
+      <button id="revealBtn">Click to reveal 🌟</button>
+
+      <p id="revealText">
+        So, this is my love letter to you — in digital ink.<br>
+        No punchlines, no perfect prose, just…<br><br>
+        <strong>Me, trying to say everything I feel, all at once.</strong><br><br>
+        Always yours,<br>
+        Me.<br><br>
+        <img src="assets/pic.jpg" alt="memory" class="pic-reveal">
+      </p>
+    </div>
+  </div>
+
+  <script>
+    const lines = document.querySelectorAll('.typeline');
+    const envelope = document.getElementById("openEnvelope");
+    const envelopeScreen = document.getElementById("envelopeScreen");
+    const letterContainer = document.getElementById("letterContainer");
+
+    envelope.addEventListener("click", () => {
+      envelopeScreen.style.display = "none";
+      letterContainer.style.display = "flex";
+      startTyping();
+    });
+
+    function startTyping() {
+      let delay = 0;
+      lines.forEach((line) => {
+        const fullText = line.textContent;
+        line.textContent = '';
+
+        setTimeout(() => {
+          let j = 0;
+          const interval = setInterval(() => {
+            if (j < fullText.length) {
+              line.textContent += fullText[j];
+              j++;
+            } else {
+              clearInterval(interval);
+            }
+          }, 30);
+        }, delay);
+
+        delay += fullText.length * 30 + 800;
+      });
+    }
+
+    document.getElementById('revealBtn').addEventListener('click', function () {
+      document.getElementById('revealText').style.display = 'block';
+      this.style.display = 'none';
+    });
+  </script>
+</body>
+</html>
